@@ -399,6 +399,10 @@ if run_button and query:
                 st.session_state.refined = refine_query(llm, query)
             except Exception as e:
                 _render_pipeline_error("refine the query", e)
+    p1.container(border=True).markdown(
+        f"<div class='colHeight'><p class='pTitle'>Refined Query</p><p>{st.session_state.refined}</p></div>",
+        unsafe_allow_html=True,
+    )
 
     # Stage 3 - Search dark web
     with status_slot.container():
@@ -409,6 +413,10 @@ if run_button and query:
     # Cap results before LLM filter step
     if len(st.session_state.results) > max_results:
         st.session_state.results = st.session_state.results[:max_results]
+    p2.container(border=True).markdown(
+        f"<div class='colHeight'><p class='pTitle'>Search Results</p><p>{len(st.session_state.results)}</p></div>",
+        unsafe_allow_html=True,
+    )
 
     # Stage 4 - Filter results
     with status_slot.container():
@@ -419,16 +427,6 @@ if run_button and query:
     # Cap filtered results before scraping
     if len(st.session_state.filtered) > max_scrape:
         st.session_state.filtered = st.session_state.filtered[:max_scrape]
-
-    # Stat cards — show immediately after filtering
-    p1.container(border=True).markdown(
-        f"<div class='colHeight'><p class='pTitle'>Refined Query</p><p>{st.session_state.refined}</p></div>",
-        unsafe_allow_html=True,
-    )
-    p2.container(border=True).markdown(
-        f"<div class='colHeight'><p class='pTitle'>Search Results</p><p>{len(st.session_state.results)}</p></div>",
-        unsafe_allow_html=True,
-    )
     p3.container(border=True).markdown(
         f"<div class='colHeight'><p class='pTitle'>Filtered Results</p><p>{len(st.session_state.filtered)}</p></div>",
         unsafe_allow_html=True,
